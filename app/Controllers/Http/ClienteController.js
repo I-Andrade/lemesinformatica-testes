@@ -24,7 +24,6 @@ class ClienteController {
   async index ({ request, response, view }) {
     
     const clientes = Cliente.all();
-    //const clientes = new Array(1,2,3);
 
     return await view.render('frontend.clientes.index', clientes);
   

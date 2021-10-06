@@ -7,10 +7,8 @@
 
 <p>Listar clientes</p>
 
-{{ clientes }}
-
 @each(cliente in clientes)
-  <li> {{ cliente }} </li>
+  <li> {{ cliente.nome }} </li>
 @endeach
 
 
