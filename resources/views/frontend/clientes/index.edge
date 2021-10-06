@@ -1,0 +1,19 @@
+
+@layout('layouts.master')
+
+@section('content')
+
+<h1>Cliente Index</h1>
+
+<p>Listar clientes</p>
+
+{{ clientes }}
+
+@each(cliente in clientes)
+  <li> {{ cliente }} </li>
+@endeach
+
+
+
+
+@endsection

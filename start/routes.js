@@ -18,11 +18,6 @@ const Route = use('Route')
 
 //Route.on('/').render('frontend.home')
 Route.get('/', 'HomeController.index').as('home.index')
-Route.get('/avaliacoes', 'AvaliacoesController.index').as('avaliacoes.index').middleware('auth')
-Route.get('/categoria', 'CategoriaController.index').as('categoria.index').middleware('auth')
-Route.get('/contato', 'ContatoController.index').as('contato.index').middleware('auth')
-Route.get('/filmes', 'FilmesController.index').as('filmes.index').middleware('auth')
-
 
 // Register Users
 Route.get('register', 'UserController.create');
@@ -32,3 +27,6 @@ Route.post('register', 'UserController.store');
 Route.get('login', 'SessionController.create');
 Route.post('login', 'SessionController.store');
 Route.get('logout', 'SessionController.delete');
+
+//Clientes
+Route.get('cliente', 'ClienteController.index').middleware('auth');
