@@ -21,9 +21,9 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async handle (error, { request, response }) {
-    //response.status(error.status).send(error.message)
+    response.status(error.status).send(error.message)
     if (error.name === 'InvalidSessionException') {
-      return response.redirect('login')
+      return response.redirect('/login')
     }
   }
 

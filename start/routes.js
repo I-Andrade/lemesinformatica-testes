@@ -16,17 +16,44 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-//Route.on('/').render('frontend.home')
-Route.get('/', 'HomeController.index').as('home.index')
+//-----------------------------------
+//ROTAS DESPROTEGIDAS
+//-----------------------------------
+// Login
+Route.get('login', 'LoginController.index');
+Route.post('login', 'LoginController.store');
+Route.get('logout', 'LoginController.delete');
 
-// Register Users
-Route.get('register', 'UserController.create');
-Route.post('register', 'UserController.store');
+// Usuarios (PROVISORIO)
+Route.get('usuario', 'UserController.create');       //create.edge provisório
+Route.post('usuario/store', 'UserController.store'); //provisório
 
-// Session
-Route.get('login', 'SessionController.create');
-Route.post('login', 'SessionController.store');
-Route.get('logout', 'SessionController.delete');
+//-----------------------------------
+//ROTAS PROTEGIDAS
+//-----------------------------------
+Route.group(() => {
 
-//Clientes
-Route.get('cliente', 'ClienteController.index').middleware('auth');
+       // Raiz
+        Route.get('/', 'OrdemServicoController.index');
+
+        // Ordens de Serviços
+        Route.get('os', 'OrdemServicoController.index');
+        Route.get('os/create', 'OrdemServicoController.create'); // Aguardando form.
+        //Route.post('os/store', 'OrdemServicoController.store'); // Aguardando form.
+
+        // Clientes
+        Route.get('clientes', 'ClienteController.index'); 
+        Route.post('clientes', 'ClienteController.index'); 
+        Route.get('cliente/create', 'ClienteController.create');
+        Route.post('cliente/create', 'ClienteController.store').validator('ClienteStore');
+        Route.get('cliente/show/:id', 'ClienteController.show'); 
+        Route.get('cliente/edit/:id', 'ClienteController.edit'); 
+        Route.post('cliente/update/:id', 'ClienteController.update').validator('ClienteUpdate'); 
+        Route.post('cliente/destroy/:id', 'ClienteController.destroy');
+
+        //Produtos
+        Route.resource('produto', 'ProdutoController'); // Para obter a lista de rotas use o comando: adonis route:list
+
+}).middleware('auth')
+
+

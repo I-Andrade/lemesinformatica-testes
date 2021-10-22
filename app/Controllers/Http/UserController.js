@@ -7,9 +7,8 @@ const User = use('App/Models/User');
 class UserController {
   
   create({ view }) {
-    return view.render('frontend.register');
+    return view.render('frontend.usuarios.create');
   }
-
 
   async store({ auth, session, request, response }) {
     const data = request.only(['username', 'email', 'password']);

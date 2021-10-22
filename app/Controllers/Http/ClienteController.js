@@ -1,6 +1,4 @@
-'use strict'
-
-const { all } = require('../../Models/User');
+'use strict';
 
 const Cliente = use('App/Models/Cliente');
 
@@ -12,6 +10,7 @@ const Cliente = use('App/Models/Cliente');
  * Resourceful controller for interacting with clientes
  */
 class ClienteController {
+  
   /**
    * Show a list of all clientes.
    * GET clientes
@@ -20,15 +19,46 @@ class ClienteController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-    
-    const clientes = Cliente.all();
+   */   
+    async index ({ view, request }) {  
+      
+      const perPage = 3 // Clientes por página
+      const page = await request.all().p || 1;
+      const testeSearch = await request.all().search;
+      const testeS = await request.all().s;
+      var clientes = "";
+      var search = "";
+         
+      if ( !(typeof testeSearch === "undefined") && !(testeSearch == null) ) {
+        var search = testeSearch.replace(/[^a-zA-Z0-9]/gi, '');
+      }
+      
+      if ( ((typeof testeSearch === "undefined") && !(typeof testeS === "undefined")) ) {
+        var search = await testeS.replace(/[^a-zA-Z0-9]/gi, '');
+      } 
 
-    return await view.render('frontend.clientes.index', clientes);
+      var clientes = await this.search(search, page, perPage);
+
+      return view.render('frontend.clientes.index',  { 
+        clientes: clientes['rows'],
+        pages:    clientes['pages'],
+        search:   search
+      });
+    }
   
-  }
-
+      /**
+       * Query for search.
+       * GET clientes/create
+       *
+       */
+    async search(search, page, perPage) {
+      return await Cliente.query()
+                          .where('nome', 'like', '%'+search+'%')
+                          .orWhere('cpf_cnpj', 'like', '%'+search+'%')
+                          .orWhere('cidade', 'like', '%'+search+'%')
+                          .paginate(page, perPage);
+    }
+  
   /**
    * Render a form to be used for creating a new cliente.
    * GET clientes/create
@@ -39,6 +69,7 @@ class ClienteController {
    * @param {View} ctx.view
    */
   async create ({ request, response, view }) {
+    return view.render('frontend.clientes.create');
   }
 
   /**
@@ -49,7 +80,14 @@ class ClienteController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, response, session }) {
+    
+    const data = request.only(Cliente.fillable()); 
+    const cliente = await Cliente.create(data);  
+
+    session.flash({ notification: 'Cliente cadastrado com sucesso' });
+    return response.redirect(`/cliente/show/${cliente.id}`);
+  
   }
 
   /**
@@ -62,6 +100,10 @@ class ClienteController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+
+    const cliente = await Cliente.find(params.id);
+    return  view.render('frontend.clientes.show', {cliente} )
+
   }
 
   /**
@@ -74,6 +116,10 @@ class ClienteController {
    * @param {View} ctx.view
    */
   async edit ({ params, request, response, view }) {
+
+    const cliente = await Cliente.find(params.id);
+    return view.render('frontend.clientes.edit', {cliente})
+
   }
 
   /**
@@ -84,7 +130,16 @@ class ClienteController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request, response, session }) {
+
+    const data = request.only(Cliente.fillable());  
+    let cliente = await Cliente.find(params.id); 
+    cliente.merge(data);
+    await cliente.save();
+
+    session.flash({ notification: 'Cliente atualizado com sucesso' });
+    return response.redirect(`/cliente/show/${cliente.id}`);
+
   }
 
   /**
@@ -95,7 +150,14 @@ class ClienteController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params, request, response, session }) {
+
+    const cliente = await Cliente.findOrFail(params.id)
+    await cliente.delete()
+
+    session.flash({ notification: 'Cliente deletado com sucesso' });
+    return response.redirect('/clientes');
+
   }
 }
 

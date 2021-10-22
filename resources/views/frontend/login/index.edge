@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Lemes Company</title>
+        
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        
+        <!-- CSS e Bootstrap)-->
+        <link rel="stylesheet" type="text/css" href="css/styles.css"> 
+        <link rel="stylesheet" type="text/css" href="css/loginUtil.css">
+        <link rel="stylesheet" type="text/css" href="css/stylesordem.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <div class="limiter">
+
+        <div class="container-login100" style="background-image: url('fundo2.jpg');">
+          <div class="wrap-login100 p-t-190 p-b-30">
+            
+            <form class="login100-form validate-form" action="/login" method="POST">
+            {{ csrfField() }}
+
+              <div class="login100-form-avatar">
+                <img src="logo.png" alt="AVATAR">
+              </div>
+
+              <span class="login100-form-title p-t-20 p-b-45">
+                Lemes Company
+              </span>
+
+              <div class="wrap-input100 validate-input m-b-10" data-validate = "Informe o usuário">
+                <input class="input100" type="text" name="email" placeholder="Email">
+                <span class="focus-input100"></span>
+                <span id="symbol-input100" class="material-icons">person
+                </span>
+              </div>
+
+              <div class="wrap-input100 validate-input m-b-10" data-validate = "Informe a senha">
+                <input class="input100" type="password" name="password" placeholder="Senha">
+                <span class="focus-input100"></span>
+                <span id="symbol-input100" class="material-icons">key
+                </span>
+              </div>
+
+              <div class="container-login100-form-btn p-t-10">
+                <button class="login100-form-btn" type="submit">
+                  Entrar
+                </button>
+              </div>
+
+              <div class="text-center w-full p-t-25 p-b-230">
+                <a href="#" class="txt1">
+                    Esqueci minha senha
+                </a>
+              </div>
+
+              
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </body>
+</html>
